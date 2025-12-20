@@ -2,25 +2,26 @@ use std::{cmp::Ordering, io};
 
 use rand::Rng;
 
+const LOWER_BOUNDARY: u32 = 1;
+const UPPER_BOUNDARY: u32 = 100;
+
 fn main() {
-    let secret_number = rand::thread_rng().gen_range(1..=100);
+    let secret_number = rand::thread_rng().gen_range(LOWER_BOUNDARY..=UPPER_BOUNDARY);
 
     println!("Guess the number!");
 
     loop {
-        println!("Please input your guess.");
+        println!("Please input your guess:");
         let mut guess = String::new();
         io::stdin()
             .read_line(&mut guess)
-            .expect("Failed to read line");
+            .expect("Failed to read input");
+
+        // Shadow the variable guess so the type changes for the remaining scope.
         let guess: u32 = match guess.trim().parse() {
-            Err(_) => {
-                println!("Not a number");
-                continue;
-            }
             Ok(num) => num,
+            Err(_) => continue,
         };
-        println!("You guessed: {guess}");
 
         match guess.cmp(&secret_number) {
             Ordering::Less => println!("too small"),
