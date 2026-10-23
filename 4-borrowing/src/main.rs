@@ -1,3 +1,7 @@
+// Rust assignment operator by default a move operator (i.e. shallow copy and mark the original as invalid)
+// only exception is if the data type implements the copy trait
+// can't add a copy trait if the data type implements the Drop trait (a.k.a. it's destructor)
+
 // std::unique_ptr<std::string> append_to_string(const std::unique_ptr<std::string>& input)
 fn append_to_string(input: &String) -> String {
     //return std::make_unique<std::string>(*input + " world");

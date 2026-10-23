@@ -1,35 +1,30 @@
-use std::{cmp::Ordering, io};
-
-use rand::Rng;
-
-const LOWER_BOUNDARY: u32 = 1;
-const UPPER_BOUNDARY: u32 = 100;
+use rand::prelude::*;
+use std::io;
 
 fn main() {
-    let secret_number = rand::thread_rng().gen_range(LOWER_BOUNDARY..=UPPER_BOUNDARY);
-
-    println!("Guess the number!");
-
+    const LOWER: usize = 1;
+    const UPPER: usize = 100;
+    let secret_number: usize = rand::rng().random_range(LOWER..=UPPER);
+    println!("secret_number={secret_number}");
     loop {
-        println!("Please input your guess:");
+        print!("guess the number: ");
         let mut guess = String::new();
         io::stdin()
             .read_line(&mut guess)
-            .expect("Failed to read input");
+            .expect("failed to read input");
 
-        // Shadow the variable guess so the type changes for the remaining scope.
-        let guess: u32 = match guess.trim().parse() {
+        let guess: usize = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
 
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("too small"),
-            Ordering::Greater => println!("too large"),
-            Ordering::Equal => {
-                println!("equal");
-                break;
-            }
-        };
+        if guess > secret_number {
+            println!("lower");
+        } else if guess < secret_number {
+            println!("higher");
+        } else {
+            println!("exact!");
+            return;
+        }
     }
 }

@@ -43,7 +43,9 @@ fn get_raw_address(addr: &IpAddr) -> String {
             let result = format!("{}, {}, {}, {}", oct0, oct1, oct2, oct3);
             result
         }
+
         IpAddr::V6(x) => x.address.clone(),
+
         // Handle future definitions
         _ => String::from(""),
     };
@@ -51,7 +53,7 @@ fn get_raw_address(addr: &IpAddr) -> String {
 
 fn main() {
     let first_addr = IpAddr::V4(IpV4::new(127, 0, 0, 1));
-    let second_addr = IpAddr::V6(IpV6::new("::::"));
+    let second_addr = IpAddr::V6(IpV6::new("1::::"));
 
     let first_raw_address = get_raw_address(&first_addr);
     let second_raw_address = get_raw_address(&second_addr);
