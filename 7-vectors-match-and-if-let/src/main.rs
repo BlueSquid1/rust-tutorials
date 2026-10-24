@@ -23,12 +23,18 @@ impl RingBuffer {
             // overwrite oldest value
             self.start = (self.start + 1) % self.size();
             let next_free_index = (self.start + self.len - 1) % self.size();
-            self.buffer[next_free_index] = value;
+            // same as self.buffer[next_free_index] = value;
+            if let Some(slot) = self.buffer.get_mut(next_free_index) {
+                *slot = value;
+            }
             return;
         }
 
         let next_free_index = (self.start + self.len) % self.size();
-        self.buffer[next_free_index] = value;
+        // same as self.buffer[next_free_index] = value;
+        if let Some(slot) = self.buffer.get_mut(next_free_index) {
+            *slot = value;
+        }
         self.len += 1;
     }
 
@@ -39,7 +45,8 @@ impl RingBuffer {
 
         let last_index = (self.start + self.len - 1) % self.size();
         self.len -= 1;
-        return Some(self.buffer[last_index]);
+        // simplier to self.buffer[last_index]
+        return self.buffer.get(last_index).copied();
     }
 }
 
@@ -74,5 +81,4 @@ fn main() {
     x.push(7);
     println!("{:?}", x.pop());
     println!("{:?}", x.pop());
-    //println!("{x:#?}");
 }
